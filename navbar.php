@@ -36,7 +36,7 @@
             <!-- Logo -->
             <li>
                 <div class="logo-wrapper waves-light">
-                    <a href="http://www.andaglos.com"><img src="save_picture/andaglos_logo.png" class="img-fluid flex-center"></a>
+                    
                 </div>
             </li>
             <!--/. Logo -->
@@ -358,7 +358,7 @@ if ($lihat['laporan_lihat'] > 0){
                 echo '<li><a href="kas.php" class="waves-effect"> <i class="fa fa-money"></i> Posisi Kas </a></li>';
 }
 ?>
-                <li><a href="https://www.andaglos.com" class="waves-effect"> <i class="fa fa-envelope"></i> Contact Us </a></li>
+             
                     
 
 
@@ -404,9 +404,7 @@ if ($lihat['laporan_lihat'] > 0){
 
         </li>
 
-        <li class="nav-item ">
-                    <a href="https://www.andaglos.com" class="nav-link"><i class="fa fa-envelope"></i> <span class="hidden-sm-down">Contact Us</span></a>
-                </li>
+  
                 <li class="nav-item ">
                     <a class="nav-link"><i class="fa fa-user"></i> <span class="hidden-sm-down"><?php echo $_SESSION['nama'];?></span>
                     </a>
