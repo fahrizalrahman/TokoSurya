@@ -1,11 +1,11 @@
 <?php session_start();
+$session_id = session_id();
 
 // memasukan file db.php
 include 'db.php';
 include 'sanitasi.php';
 
 
-$session_id = session_id();
 $hapus_order = stringdoang($_POST['hapus_order']);
 
 
@@ -14,7 +14,7 @@ $hapus_order = stringdoang($_POST['hapus_order']);
  
  // menyimpan data sementara yg ada pada $query
  $data = mysqli_fetch_array($query);
- echo $total = $data['total_penjualan'];
+ echo koma($total = $data['total_penjualan'],2);
 
 
         //Untuk Memutuskan Koneksi Ke Database    
