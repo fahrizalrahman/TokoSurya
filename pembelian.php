@@ -250,7 +250,7 @@ $pembelian_hapus = mysqli_num_rows($pilih_akses_pembelian_hapus);
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $(document).on('click','.detail',function(){
+    $(document).on('click','.detail',function(e){
 
       var no_faktur = $(this).attr('no_faktur');
 
