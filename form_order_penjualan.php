@@ -844,22 +844,6 @@ $(document).ready(function(){
       $(".chosen").chosen({no_results_text: "Maaf, Data Tidak Ada!",search_contains:true});   
 </script>
 
-<script type="text/javascript">
-  
-        $(document).ready(function(){
-        $("#kode_barcode").blur(function(){
-
-          var kode_barang = $("#kode_barcode").val();
-       
-          $.post("nama_barcode.php",{kode_barang: kode_barang}, function(data){
-          $("#ber_stok").val(data);
-          });
-
-
-
-        });
-        });  
-</script>
 
 <script>
 //untuk menampilkan data yang diambil pada form tbs penjualan berdasarkan id=formtambahproduk
@@ -868,8 +852,6 @@ $(document).ready(function(){
     var kode_barang = $("#kode_barcode").val();
     var level_harga = $("#level_harga").val();
     var sales = $("#sales").val();
-
-
 
 $.get("cek_barang.php",{kode_barang:kode_barang},function(data){
 if (data != 1) {
@@ -889,48 +871,14 @@ $.post("barcode_order.php",{kode_barang:kode_barang,sales:sales,level_harga:leve
 
         $(".tr-kode-"+kode_barang+"").remove();
         $("#ppn").attr("disabled", true);
-        $("#tbody").prepend(data);
         $("#kode_barang").val('');
         $("#nama_barang").val('');
         $("#jumlah_barang").val('');
         $("#potongan1").val('');
         $("#tax1").val('');
-      
-  var session_id = $("#session_id").val();
-        
-        $.get("cek_total_seluruh_order.php",
-        function(data){
-        $("#total2").val(data);
-        $("#total1").val(data);
-
-        });
-     
-     });
 
 
-$.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
-
-$.post("lihat_promo_alert.php",{id:json.id},function(info){
-
-    if (info == '')
-    {
-
-    }
-    else{
-      $("#modal_promo_alert").modal('show');
-      $("#tampil_alert").html(info);
-    }
-
-});
-
-});
-
-
-}
-
-});
-
-    $('#tabel_tbs_order').DataTable().destroy();
+            $('#tabel_tbs_order').DataTable().destroy();
     var dataTable = $('#tabel_tbs_order').DataTable( {
       "processing": true,
       "serverSide": true,
@@ -954,16 +902,47 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
          }
     });
 
+      
+  var session_id = $("#session_id").val();
+        
+        $.get("cek_total_seluruh_order.php",
+        function(data){
+        $("#total2").val(data);
+        $("#total1").val(data);
 
-  });
+        });
      
+     });
 
-     
+
+$.getJSON('lihat_nama_barang_order.php',{kode_barang:kode_barang}, function(json){
+
+$.post("lihat_promo_alert.php",{id:json},function(info){
+
+    if (info == '')
+    {
+
+    }
+    else{
+      $("#modal_promo_alert").modal('show');
+      $("#tampil_alert").html(info);
+    }
+
+});
+
+});
+
+
+}//end else cek barang
+
+    });
+
+});
+ 
      $("#form_barcode").submit(function(){
     return false;
     
     });
-
  </script>  
 
    <script>
@@ -1029,6 +1008,12 @@ $.post("lihat_promo_alert.php",{id:json.id},function(info){
          $("#kd_pelanggan").focus();
 
   }
+
+     else if (harga == '')
+   {
+    alert("Harga Dengan Level Harga ini 0, Silahkan Edit Harga Produk !!");
+  }
+
   
   else if (ber_stok == 'Jasa' ){
 
@@ -1117,6 +1102,7 @@ else{
      $("#tbody").prepend(data);
 
      $("#kode_barang").val('');
+     $("#kode_barang").trigger('chosen:updated');  
      $("#kode_barang").trigger('chosen:open');     
      $("#nama_barang").val('');
      $("#harga_produk").val('');
@@ -1125,6 +1111,31 @@ else{
      $("#potongan1").val('');
      $("#tax1").val('');
 
+//pembaruan table otomatis
+$('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
+//pembaruan table otomatis
 
      
      });
@@ -1156,14 +1167,7 @@ else{
      $("#potongan1").val('');
      $("#tax1").val('');
 
-
-     
-     });
-
-}
-}
-
-
+//pembaruan table otomatis
 $('#tabel_tbs_order').DataTable().destroy();
     var dataTable = $('#tabel_tbs_order').DataTable( {
       "processing": true,
@@ -1187,6 +1191,17 @@ $('#tabel_tbs_order').DataTable().destroy();
            $(nRow).attr('class','tr-id-'+aData[9]+'');
          }
     });
+//pembaruan table otomatis
+
+
+     
+     });
+
+}
+}
+
+
+
     
 });
 
@@ -1262,6 +1277,32 @@ $("#transaksi_baru").show();
      $("#total2").val('');
     $('#tbody').html('');
        
+ $('#tabel_tbs_order').DataTable().destroy();
+    var dataTable = $('#tabel_tbs_order').DataTable( {
+      "processing": true,
+      "serverSide": true,
+      "ajax":{
+        url :"data_tbs_order_penjualan.php", // json datasource
+        "data": function ( d ) {
+          d.session_id = $("#session_id").val();
+          // d.custom = $('#myInput').val();
+          // etc
+        },
+         
+         type: "post",  // method  , by default get
+         error: function(){  // error handling
+           $(".employee-grid-error").html("");
+           $("#tabel_tbs_order").append('<tbody class="employee-grid-error"><tr><th colspan="3">No data found in the server</th></tr></tbody>');
+           $("#employee-grid_processing").css("display","none");
+           }
+      },
+        "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+           $(nRow).attr('class','tr-id-'+aData[9]+'');
+         }
+    });
+
+
+       
    });
 
   }
@@ -1275,15 +1316,21 @@ $("#transaksi_baru").show();
 
  }
 
+
+
+
+
+
+
+
+
  $("form").submit(function(){
     return false;
- 
-});
-
 });
 
 
-  </script>
+});
+</script>
 
 
 
@@ -1546,7 +1593,7 @@ $(function() {
           
           });////penutup function(data)
 
-      $.getJSON('lihat_nama_barang.php',{kode_barang:kode_barang}, function(json){
+      $.getJSON('lihat_nama_barang_order.php',{kode_barang:kode_barang}, function(json){
       
       if (json == null)
       {

@@ -2,13 +2,14 @@
 
 // memsukan file db,php
 include 'db.php';
+include 'sanitasi.php';
 
-
-$id = $_POST['id'];
-$no_faktur = $_POST['no_faktur'];
+$id = stringdoang($_POST['id']);
+$no_faktur = stringdoang($_POST['no_faktur']);
 $user =  $_SESSION['user_name'];
 
 // INSERT HISTORY PENJUALAN
+
 $penjualan = $db->query("SELECT * FROM penjualan WHERE no_faktur = '$no_faktur'");
 $data_penjualan = mysqli_fetch_array($penjualan);
 
